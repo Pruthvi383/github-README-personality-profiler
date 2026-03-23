@@ -1,0 +1,3 @@
+spacy==3.7.5
+sentence-transformers==3.4.1
+bertopic==0.16.4

@@ -21,10 +21,26 @@ GitHub Personality Profiler is a FastAPI app that analyzes a public GitHub profi
 ## Run Instructions
 
 1. `pip install -r requirements.txt`
-2. `python -m spacy download en_core_web_sm`
-3. `cp .env.example .env  # add your GitHub token`
-4. `python train.py  # optional, generates the ML model`
-5. `uvicorn main:app --reload`
+2. `cp .env.example .env  # add your GitHub token`
+3. `python train.py  # optional, generates the ML model`
+4. `uvicorn main:app --reload`
+
+## Optional Heavy NLP Stack
+
+The production app does not require BERTopic, sentence-transformers, or spaCy at runtime.
+
+- Install them only if you want to experiment locally with the heavier topic-modeling stack:
+  `pip install -r requirements-ml.txt`
+- If you install spaCy, you can also add the English model:
+  `python -m spacy download en_core_web_sm`
+
+Keeping these packages out of `requirements.txt` dramatically reduces Railway build time and avoids deploy failures caused by large ML wheels.
+
+## Railway Notes
+
+- Set `GITHUB_TOKEN` in Railway service variables. `.env` is not deployed from your repo.
+- This repo includes [railway.json](/Users/pruthvipatil/github%20readme%20project%202/railway.json) with an explicit Railpack builder, start command, and `/health` healthcheck.
+- The runtime dependency set is intentionally slim so Railway doesn’t spend minutes downloading `torch`, BERTopic, and related ML packages during every deploy.
 
 ## Notes
 
